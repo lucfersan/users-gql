@@ -18,5 +18,6 @@ module.exports = {
   transform: {
     '\\.ts$': 'ts-jest'
   },
-  clearMocks: true
+  clearMocks: true,
+  testEnvironment: '<rootDir>/prisma/prisma-test-environment.js'
 }
