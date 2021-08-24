@@ -1,4 +1,5 @@
 import { AddUserService } from '@/data/services'
+import { UsernameInUseError } from '@/domain/entities/errors'
 import { CheckUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
 import { throwError } from '@/tests/domain/mocks'
 import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
@@ -30,5 +31,11 @@ describe('AddUserService', () => {
     jest.spyOn(checkUserByUsernameRepositorySpy, 'check').mockImplementationOnce(throwError)
     const promise = sut.add(mockAddUserParams())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('should return an UsernameInUseError if CheckUserByUsernameRepository returns true', async () => {
+    const { sut } = makeSut()
+    const result = await sut.add(mockAddUserParams())
+    expect(result).toBeInstanceOf(UsernameInUseError)
   })
 })
