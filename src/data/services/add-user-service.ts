@@ -1,15 +1,19 @@
-import { CheckUserByUsernameRepository } from '@/data/contracts/repos'
+import { AddUserRepository, CheckUserByUsernameRepository } from '@/data/contracts/repos'
 import { UsernameInUseError } from '@/domain/entities/errors'
 import { AddUser } from '@/domain/use-cases'
 
 export class AddUserService implements AddUser {
-  constructor (private readonly checkUserByUsernameRepository: CheckUserByUsernameRepository) { }
+  constructor (
+    private readonly checkUserByUsernameRepository: CheckUserByUsernameRepository,
+    private readonly addUserRepository: AddUserRepository
+  ) { }
 
-  async add ({ username }: AddUser.Params): Promise<AddUser.Result> {
-    const exists = await this.checkUserByUsernameRepository.check({ username })
+  async add (params: AddUser.Params): Promise<AddUser.Result> {
+    const exists = await this.checkUserByUsernameRepository.check({ username: params.username })
     if (exists) {
       return new UsernameInUseError()
     }
+    await this.addUserRepository.add(params)
     return new Error()
   }
 }
