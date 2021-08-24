@@ -13,7 +13,7 @@ export class AddUserService implements AddUser {
     if (exists) {
       return new UsernameInUseError()
     }
-    await this.addUserRepository.add(params)
-    return new Error()
+    const basicUser = await this.addUserRepository.add(params)
+    return basicUser
   }
 }
