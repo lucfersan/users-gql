@@ -1,6 +1,7 @@
 import { AddUserService } from '@/data/services'
 import { CheckUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
-import { mockAddUserParams } from '@/tests/domain/mocks/use-cases/user'
+import { throwError } from '@/tests/domain/mocks'
+import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 type SutTypes = {
   sut: AddUserService
@@ -22,5 +23,12 @@ describe('AddUserService', () => {
     const params = mockAddUserParams()
     await sut.add(params)
     expect(checkUserByUsernameRepositorySpy.params.username).toBe(params.username)
+  })
+
+  it('should throw if CheckUserByUsernameRepository throws', async () => {
+    const { sut, checkUserByUsernameRepositorySpy } = makeSut()
+    jest.spyOn(checkUserByUsernameRepositorySpy, 'check').mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
   })
 })
