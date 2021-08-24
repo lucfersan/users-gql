@@ -1,0 +1,29 @@
+{
+  "extends": "standard-with-typescript",
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["import-helpers"],
+  "rules": {
+    "import-helpers/order-imports": [
+      "warn",
+      {
+        "newlinesBetween": "always",
+        "groups": [
+          ["module", "absolute"],
+          "/^@/",
+          ["parent", "sibling", "index"]
+        ],
+        "alphabetize": { "order": "asc", "ignoreCase": true }
+      }
+    ],
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/return-await": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "import/export": "off",
+    "@typescript-eslint/no-invalid-void-type": "off"
+  }
+}
