@@ -9,3 +9,6 @@ CREATE TABLE "User" (
 
     PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User.username_unique" ON "User"("username");
