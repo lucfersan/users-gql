@@ -1,20 +1,24 @@
 import { AddUserService } from '@/data/services'
 import { UsernameInUseError } from '@/domain/entities/errors'
-import { CheckUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
+import { AddUserRepositorySpy, CheckUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
 import { throwError } from '@/tests/domain/mocks'
 import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 type SutTypes = {
   sut: AddUserService
   checkUserByUsernameRepositorySpy: CheckUserByUsernameRepositorySpy
+  addUserRepositorySpy: AddUserRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
   const checkUserByUsernameRepositorySpy = new CheckUserByUsernameRepositorySpy()
-  const sut = new AddUserService(checkUserByUsernameRepositorySpy)
+  checkUserByUsernameRepositorySpy.result = false
+  const addUserRepositorySpy = new AddUserRepositorySpy()
+  const sut = new AddUserService(checkUserByUsernameRepositorySpy, addUserRepositorySpy)
   return {
     sut,
-    checkUserByUsernameRepositorySpy
+    checkUserByUsernameRepositorySpy,
+    addUserRepositorySpy
   }
 }
 
@@ -34,8 +38,16 @@ describe('AddUserService', () => {
   })
 
   it('should return an UsernameInUseError if CheckUserByUsernameRepository returns true', async () => {
-    const { sut } = makeSut()
+    const { sut, checkUserByUsernameRepositorySpy } = makeSut()
+    checkUserByUsernameRepositorySpy.result = true
     const result = await sut.add(mockAddUserParams())
     expect(result).toBeInstanceOf(UsernameInUseError)
+  })
+
+  it('should call AddUserRepository with correct values', async () => {
+    const { sut, addUserRepositorySpy } = makeSut()
+    const params = mockAddUserParams()
+    await sut.add(params)
+    expect(addUserRepositorySpy.params).toEqual(params)
   })
 })
