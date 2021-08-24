@@ -15,5 +15,5 @@ export namespace AddUser {
     id: string
     username: string
     firstName: string
-  }
+  } | Error
 }
