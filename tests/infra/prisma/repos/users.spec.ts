@@ -28,4 +28,15 @@ describe('PrismaUsersRepository', () => {
       expect(result).toBe(false)
     })
   })
+
+  describe('add', () => {
+    it('should return a basic user on success', async () => {
+      const sut = makeSut()
+      const params = mockAddUserParams()
+      const basicUser = await sut.add(params)
+      expect(basicUser.id).toBeDefined()
+      expect(basicUser.firstName).toBe(params.firstName)
+      expect(basicUser.username).toBe(params.username)
+    })
+  })
 })
