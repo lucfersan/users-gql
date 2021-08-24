@@ -57,4 +57,10 @@ describe('AddUserService', () => {
     const promise = sut.add(mockAddUserParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('should return the AddUserRepository result on success', async () => {
+    const { sut, addUserRepositorySpy } = makeSut()
+    const result = await sut.add(mockAddUserParams())
+    expect(result).toEqual(addUserRepositorySpy.result)
+  })
 })
