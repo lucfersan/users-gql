@@ -50,4 +50,11 @@ describe('AddUserService', () => {
     await sut.add(params)
     expect(addUserRepositorySpy.params).toEqual(params)
   })
+
+  it('should throw if AddUserRepository throws', async () => {
+    const { sut, addUserRepositorySpy } = makeSut()
+    jest.spyOn(addUserRepositorySpy, 'add').mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
