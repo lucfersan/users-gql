@@ -1,14 +1,11 @@
+import { makeAddUserController } from '@/main/factories/controllers'
+
 export default {
   Mutation: {
-    addUser: () => {
-      return {
-        id: 'any_id',
-        firstName: 'any_first_name',
-        lastName: 'any_last_name',
-        username: 'any_username',
-        age: 100,
-        password: 'any_password'
-      }
+    addUser: async (parent: any, args: any) => {
+      const addUserController = makeAddUserController()
+      const httpResponse = await addUserController.handle(args)
+      return httpResponse.data
     }
   }
 }
