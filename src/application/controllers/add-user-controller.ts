@@ -30,12 +30,11 @@ export class AddUserController implements Controller {
     }
   }
 
-  private validateRequestFields (httpRequest: HttpRequest): Error | undefined {
-    const requiredFields = Object.entries(httpRequest)
+  private validateRequestFields (request: any): Error | undefined {
+    const requiredFields = ['firstName', 'lastName', 'age', 'username', 'password']
     for (const field of requiredFields) {
-      const [key, value] = field
-      if (!value) {
-        return new RequiredFieldError(key)
+      if (!request[field]) {
+        return new RequiredFieldError(field)
       }
     }
   }
