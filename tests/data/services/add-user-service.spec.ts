@@ -48,11 +48,28 @@ describe('AddUserService', () => {
     expect(result).toBeInstanceOf(UsernameInUseError)
   })
 
-  it('should call AddUserRepository with correct values', async () => {
-    const { sut, addUserRepositorySpy } = makeSut()
+  it('should call Hasher with correct value', async () => {
+    const { sut, hasherSpy } = makeSut()
     const params = mockAddUserParams()
     await sut.add(params)
-    expect(addUserRepositorySpy.params).toEqual(params)
+    expect(hasherSpy.params.plaintext).toBe(params.password)
+  })
+
+  it('should throw if Hasher throws', async () => {
+    const { sut, hasherSpy } = makeSut()
+    jest.spyOn(hasherSpy, 'hash').mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
+  })
+
+  it('should call AddUserRepository with correct values', async () => {
+    const { sut, addUserRepositorySpy, hasherSpy } = makeSut()
+    const params = mockAddUserParams()
+    await sut.add(params)
+    expect(addUserRepositorySpy.params).toEqual({
+      ...params,
+      password: hasherSpy.result
+    })
   })
 
   it('should throw if AddUserRepository throws', async () => {
@@ -66,19 +83,5 @@ describe('AddUserService', () => {
     const { sut, addUserRepositorySpy } = makeSut()
     const result = await sut.add(mockAddUserParams())
     expect(result).toEqual(addUserRepositorySpy.result)
-  })
-
-  it('should call Hasher with correct value', async () => {
-    const { sut, hasherSpy } = makeSut()
-    const params = mockAddUserParams()
-    await sut.add(params)
-    expect(hasherSpy.params.plaintext).toBe(params.password)
-  })
-
-  it('should throw if Hasher throws', async () => {
-    const { sut, hasherSpy } = makeSut()
-    jest.spyOn(hasherSpy, 'hash').mockImplementationOnce(throwError)
-    const promise = sut.add(mockAddUserParams())
-    await expect(promise).rejects.toThrow()
   })
 })
