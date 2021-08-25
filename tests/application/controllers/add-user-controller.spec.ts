@@ -1,6 +1,7 @@
 import { AddUserController } from '@/application/controllers'
 import { RequiredFieldError } from '@/application/errors'
 import { badRequest, serverError } from '@/application/helpers'
+import { UsernameInUseError } from '@/domain/entities/errors'
 import { throwError } from '@/tests/domain/mocks'
 import { AddUserSpy, mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
@@ -40,5 +41,12 @@ describe('AddUserController', () => {
     jest.spyOn(addUserSpy, 'add').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle(mockAddUserParams())
     expect(httpResponse).toEqual(serverError())
+  })
+
+  it('should return a badRequest with UsernameInUseError if the username already exists', async () => {
+    const { sut, addUserSpy } = makeSut()
+    addUserSpy.result = new UsernameInUseError()
+    const httpResponse = await sut.handle(mockAddUserParams())
+    expect(httpResponse).toEqual(badRequest(new UsernameInUseError()))
   })
 })
