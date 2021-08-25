@@ -1,4 +1,4 @@
-import { badRequest } from '@/application/helpers'
+import { badRequest, serverError } from '@/application/helpers'
 import { AddUser } from '@/domain/use-cases'
 
 type HttpRequest = {
@@ -13,11 +13,15 @@ export class AddUserController {
   constructor (private readonly addUser: AddUser) {}
 
   async handle (httpRequest: HttpRequest): Promise<any> {
-    const error = this.validateRequestFields(httpRequest)
-    if (error) {
-      return badRequest(error)
+    try {
+      const error = this.validateRequestFields(httpRequest)
+      if (error) {
+        return badRequest(error)
+      }
+      await this.addUser.add(httpRequest)
+    } catch {
+      return serverError()
     }
-    await this.addUser.add(httpRequest)
   }
 
   private validateRequestFields (httpRequest: HttpRequest): Error | undefined {
