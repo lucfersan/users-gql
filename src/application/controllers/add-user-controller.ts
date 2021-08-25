@@ -1,3 +1,5 @@
+import { badRequest } from '@/application/helpers'
+
 type HttpRequest = {
   firstName: string
   lastName: string
@@ -10,10 +12,7 @@ export class AddUserController {
   async handle (httpRequest: HttpRequest): Promise<any> {
     const error = this.validateRequestFields(httpRequest)
     if (error) {
-      return {
-        statusCode: 400,
-        data: error
-      }
+      return badRequest(error)
     }
   }
 
