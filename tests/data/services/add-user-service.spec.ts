@@ -74,4 +74,11 @@ describe('AddUserService', () => {
     await sut.add(params)
     expect(hasherSpy.params.plaintext).toBe(params.password)
   })
+
+  it('should throw if Hasher throws', async () => {
+    const { sut, hasherSpy } = makeSut()
+    jest.spyOn(hasherSpy, 'hash').mockImplementationOnce(throwError)
+    const promise = sut.add(mockAddUserParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
