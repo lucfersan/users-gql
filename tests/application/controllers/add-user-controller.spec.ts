@@ -31,7 +31,7 @@ class AddUserController {
 }
 
 describe('AddUserController', () => {
-  it('should return a badRequest if firstName is not provided', async () => {
+  it('should return a badRequest if one of the required fields is not provided', async () => {
     const sut = new AddUserController()
     const httpResponse = await sut.handle({
       ...mockAddUserParams(),
@@ -40,18 +40,6 @@ describe('AddUserController', () => {
     expect(httpResponse).toEqual({
       statusCode: 400,
       data: new Error('Required field: firstName')
-    })
-  })
-
-  it('should return a badRequest if lastName is not provided', async () => {
-    const sut = new AddUserController()
-    const httpResponse = await sut.handle({
-      ...mockAddUserParams(),
-      lastName: ''
-    })
-    expect(httpResponse).toEqual({
-      statusCode: 400,
-      data: new Error('Required field: lastName')
     })
   })
 })
