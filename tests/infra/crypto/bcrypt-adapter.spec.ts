@@ -22,9 +22,12 @@ describe('BcryptAdapter', () => {
 
   describe('hash', () => {
     let plaintext: string
+    let fakeDigest: string
 
     beforeAll(() => {
       plaintext = faker.internet.password()
+      fakeDigest = faker.datatype.uuid()
+      fakeBcrypt.hash.mockImplementation(() => fakeDigest)
     })
 
     it('should call hash with correct values', async () => {
@@ -37,6 +40,11 @@ describe('BcryptAdapter', () => {
       jest.spyOn(fakeBcrypt, 'hash').mockImplementationOnce(throwError)
       const promise = sut.hash({ plaintext })
       await expect(promise).rejects.toThrow()
+    })
+
+    it('should return a digest on hash success', async () => {
+      const digest = await sut.hash({ plaintext })
+      expect(digest).toBe(fakeDigest)
     })
   })
 })
