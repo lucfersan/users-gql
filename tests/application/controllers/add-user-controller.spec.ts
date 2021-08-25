@@ -15,6 +15,11 @@ class AddUserController {
         statusCode: 400,
         data: new Error('Missing param: firstName')
       }
+    } else if (!httpRequest.lastName) {
+      return {
+        statusCode: 400,
+        data: new Error('Missing param: lastName')
+      }
     }
   }
 }
@@ -29,6 +34,18 @@ describe('AddUserController', () => {
     expect(httpResponse).toEqual({
       statusCode: 400,
       data: new Error('Missing param: firstName')
+    })
+  })
+
+  it('should return a badRequest if lastName is not provided', async () => {
+    const sut = new AddUserController()
+    const httpResponse = await sut.handle({
+      ...mockAddUserParams(),
+      lastName: ''
+    })
+    expect(httpResponse).toEqual({
+      statusCode: 400,
+      data: new Error('Missing param: lastName')
     })
   })
 })
