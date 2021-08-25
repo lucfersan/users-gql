@@ -1,6 +1,6 @@
 import { AddUserController } from '@/application/controllers'
 import { RequiredFieldError } from '@/application/errors'
-import { badRequest, serverError } from '@/application/helpers'
+import { badRequest, created, serverError } from '@/application/helpers'
 import { UsernameInUseError } from '@/domain/entities/errors'
 import { throwError } from '@/tests/domain/mocks'
 import { AddUserSpy, mockAddUserParams } from '@/tests/domain/mocks/use-cases'
@@ -48,5 +48,11 @@ describe('AddUserController', () => {
     addUserSpy.result = new UsernameInUseError()
     const httpResponse = await sut.handle(mockAddUserParams())
     expect(httpResponse).toEqual(badRequest(new UsernameInUseError()))
+  })
+
+  it('should return created on success', async () => {
+    const { sut, addUserSpy } = makeSut()
+    const httpResponse = await sut.handle(mockAddUserParams())
+    expect(httpResponse).toEqual(created(addUserSpy.result))
   })
 })
