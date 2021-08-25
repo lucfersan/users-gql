@@ -49,5 +49,18 @@ describe('Users GraphQL', () => {
       expect(res.data?.addUser.firstName).toBe(params.firstName)
       expect(res.data?.addUser.username).toBe(params.username)
     })
+
+    it('should return a UsernameInUseError if username is already in use', async () => {
+      const params = mockAddUserParams()
+      await prisma.user.create({
+        data: params
+      })
+      const res = await apolloServer.executeOperation({
+        query: addUserMutation,
+        variables: params
+      })
+      expect(res.data).toBeFalsy()
+      expect(res.errors?.[0].message).toBe('The username provided is already in use.')
+    })
   })
 })
