@@ -1,4 +1,7 @@
 import './config/module-alias'
 import { app } from '@/main/config/app'
+import { env } from '@/main/config/env'
 
-app.listen(3333, () => console.log('Server running at 3333 🔥'))
+app.listen(env.port, () => {
+  console.log(`Server started at port ${env.port} 🔥`)
+})
