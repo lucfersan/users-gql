@@ -1,3 +1,4 @@
+import { RequiredFieldError } from '@/application/errors'
 import { badRequest, serverError } from '@/application/helpers'
 import { AddUser } from '@/domain/use-cases'
 
@@ -29,7 +30,7 @@ export class AddUserController {
     for (const field of requiredFields) {
       const [key, value] = field
       if (!value) {
-        return new Error(`Required field: ${key}`)
+        return new RequiredFieldError(key)
       }
     }
   }

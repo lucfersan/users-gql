@@ -1,4 +1,5 @@
 import { AddUserController } from '@/application/controllers'
+import { RequiredFieldError } from '@/application/errors'
 import { badRequest, serverError } from '@/application/helpers'
 import { throwError } from '@/tests/domain/mocks'
 import { AddUserSpy, mockAddUserParams } from '@/tests/domain/mocks/use-cases'
@@ -24,7 +25,7 @@ describe('AddUserController', () => {
       ...mockAddUserParams(),
       firstName: ''
     })
-    expect(httpResponse).toEqual(badRequest(new Error('Required field: firstName')))
+    expect(httpResponse).toEqual(badRequest(new RequiredFieldError('firstName')))
   })
 
   it('should return call AddUser with correct values', async () => {
