@@ -15,8 +15,11 @@ export class AddUserService implements AddUser {
     if (exists) {
       return new UsernameInUseError()
     }
-    await this.hasher.hash({ plaintext: params.password })
-    const basicUser = await this.addUserRepository.add(params)
+    const hash = await this.hasher.hash({ plaintext: params.password })
+    const basicUser = await this.addUserRepository.add({
+      ...params,
+      password: hash
+    })
     return basicUser
   }
 }
