@@ -1,5 +1,6 @@
 import { AddUserController } from '@/application/controllers'
-import { badRequest } from '@/application/helpers'
+import { badRequest, serverError } from '@/application/helpers'
+import { throwError } from '@/tests/domain/mocks'
 import { AddUserSpy, mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 type SutTypes = {
@@ -31,5 +32,12 @@ describe('AddUserController', () => {
     const params = mockAddUserParams()
     await sut.handle(params)
     expect(addUserSpy.params).toEqual(params)
+  })
+
+  it('should return a serverError if AddUser throws', async () => {
+    const { sut, addUserSpy } = makeSut()
+    jest.spyOn(addUserSpy, 'add').mockImplementationOnce(throwError)
+    const httpResponse = await sut.handle(mockAddUserParams())
+    expect(httpResponse).toEqual(serverError())
   })
 })
