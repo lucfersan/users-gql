@@ -1,3 +1,4 @@
+import { Hasher } from '@/data/contracts/crypto'
 import { AddUserRepository, CheckUserByUsernameRepository } from '@/data/contracts/repos'
 import { UsernameInUseError } from '@/domain/entities/errors'
 import { AddUser } from '@/domain/use-cases'
@@ -5,6 +6,7 @@ import { AddUser } from '@/domain/use-cases'
 export class AddUserService implements AddUser {
   constructor (
     private readonly checkUserByUsernameRepository: CheckUserByUsernameRepository,
+    private readonly hasher: Hasher,
     private readonly addUserRepository: AddUserRepository
   ) { }
 
@@ -13,6 +15,7 @@ export class AddUserService implements AddUser {
     if (exists) {
       return new UsernameInUseError()
     }
+    await this.hasher.hash({ plaintext: params.password })
     const basicUser = await this.addUserRepository.add(params)
     return basicUser
   }
