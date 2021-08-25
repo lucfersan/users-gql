@@ -3,6 +3,11 @@ export type HttpResponse = {
   data: any
 }
 
+export const created = (data: object): HttpResponse => ({
+  statusCode: 400,
+  data
+})
+
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,
   data: error
