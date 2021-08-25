@@ -1,5 +1,6 @@
 import { RequiredFieldError } from '@/application/errors'
 import { badRequest, serverError } from '@/application/helpers'
+import { UsernameInUseError } from '@/domain/entities/errors'
 import { AddUser } from '@/domain/use-cases'
 
 type HttpRequest = {
@@ -19,7 +20,10 @@ export class AddUserController {
       if (error) {
         return badRequest(error)
       }
-      await this.addUser.add(httpRequest)
+      const result = await this.addUser.add(httpRequest)
+      if (result instanceof UsernameInUseError) {
+        return badRequest(new UsernameInUseError())
+      }
     } catch {
       return serverError()
     }
