@@ -1,5 +1,5 @@
 import { RequiredFieldError } from '@/application/errors'
-import { badRequest, created, HttpResponse, serverError } from '@/application/helpers'
+import { badRequest, created, HttpResponse, serverError, Controller } from '@/application/helpers'
 import { UsernameInUseError } from '@/domain/entities/errors'
 import { AddUser } from '@/domain/use-cases'
 
@@ -11,7 +11,7 @@ type HttpRequest = {
   password: string
 }
 
-export class AddUserController {
+export class AddUserController implements Controller {
   constructor (private readonly addUser: AddUser) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
