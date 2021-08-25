@@ -1,14 +1,24 @@
 import request from 'supertest'
 
+import prisma from '@/infra/prisma/client'
 import { app } from '@/main/config/app'
+import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 describe('User Routes', () => {
+  afterAll(async () => {
+    await prisma.$disconnect()
+  })
+
   describe('POST /users', () => {
-    it('should create a new user', async () => {
-      await request(app)
+    it('should add a user', async () => {
+      const params = mockAddUserParams()
+      const { statusCode, body } = await request(app)
         .post('/api/users')
-        .send()
-        .expect(200)
+        .send(params)
+      expect(statusCode).toBe(201)
+      expect(body.id).toBeDefined()
+      expect(body.firstName).toBe(params.firstName)
+      expect(body.username).toBe(params.username)
     })
   })
 })
