@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt'
 import faker from 'faker'
 
 import { BcryptAdapter } from '@/infra/crypto'
+import { throwError } from '@/tests/domain/mocks'
 
 jest.mock('bcrypt')
 
@@ -30,6 +31,12 @@ describe('BcryptAdapter', () => {
       await sut.hash({ plaintext })
       expect(fakeBcrypt.hash).toHaveBeenCalledWith(plaintext, salt)
       expect(fakeBcrypt.hash).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw if hash throws', async () => {
+      jest.spyOn(fakeBcrypt, 'hash').mockImplementationOnce(throwError)
+      const promise = sut.hash({ plaintext })
+      await expect(promise).rejects.toThrow()
     })
   })
 })
