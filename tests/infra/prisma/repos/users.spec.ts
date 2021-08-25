@@ -1,8 +1,8 @@
 import faker from 'faker'
 
-import { mockAddUserParams } from '@/../tests/domain/mocks/use-cases'
 import prisma from '@/infra/prisma/client'
 import { PrismaUsersRepository } from '@/infra/prisma/repos'
+import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 const makeSut = (): PrismaUsersRepository => new PrismaUsersRepository()
 
