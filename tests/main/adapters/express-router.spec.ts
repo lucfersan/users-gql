@@ -37,4 +37,11 @@ describe('ExpressRouterAdapter', () => {
     expect(controller.handle).toHaveBeenCalledWith({ field })
     expect(controller.handle).toHaveBeenCalledTimes(1)
   })
+
+  it('should call handle with empty request', async () => {
+    const req = getMockReq()
+    sut(req, res, next)
+    expect(controller.handle).toHaveBeenCalledWith({})
+    expect(controller.handle).toHaveBeenCalledTimes(1)
+  })
 })
