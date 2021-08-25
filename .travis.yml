@@ -5,7 +5,6 @@ services:
   - docker
 before_install:
   - docker run --name postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
-  - docker ps -a
 script:
   - npm run lint
   - npm run test:coveralls

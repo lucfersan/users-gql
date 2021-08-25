@@ -16,9 +16,7 @@
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
-    "up": "docker-compose up -d",
-    "down": "docker-compose down"
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
   },
   "dependencies": {
     "@prisma/client": "^2.29.1",
