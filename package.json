@@ -5,7 +5,6 @@
     "node": "16.x"
   },
   "license": "MIT",
-  "main": "index.js",
   "scripts": {
     "start": "node -r dotenv-flow/config dist/main",
     "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv-flow/config --inspect=0.0.0.0:9229 src/main",
