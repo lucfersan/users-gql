@@ -1,5 +1,6 @@
 import { AddUserService } from '@/data/services'
 import { UsernameInUseError } from '@/domain/entities/errors'
+import { HasherSpy } from '@/tests/data/mocks/contracts/crypto'
 import { AddUserRepositorySpy, CheckUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
 import { throwError } from '@/tests/domain/mocks'
 import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
@@ -7,17 +8,20 @@ import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 type SutTypes = {
   sut: AddUserService
   checkUserByUsernameRepositorySpy: CheckUserByUsernameRepositorySpy
+  hasherSpy: HasherSpy
   addUserRepositorySpy: AddUserRepositorySpy
 }
 
 const makeSut = (): SutTypes => {
   const checkUserByUsernameRepositorySpy = new CheckUserByUsernameRepositorySpy()
   checkUserByUsernameRepositorySpy.result = false
+  const hasherSpy = new HasherSpy()
   const addUserRepositorySpy = new AddUserRepositorySpy()
-  const sut = new AddUserService(checkUserByUsernameRepositorySpy, addUserRepositorySpy)
+  const sut = new AddUserService(checkUserByUsernameRepositorySpy, hasherSpy, addUserRepositorySpy)
   return {
     sut,
     checkUserByUsernameRepositorySpy,
+    hasherSpy,
     addUserRepositorySpy
   }
 }
@@ -62,5 +66,12 @@ describe('AddUserService', () => {
     const { sut, addUserRepositorySpy } = makeSut()
     const result = await sut.add(mockAddUserParams())
     expect(result).toEqual(addUserRepositorySpy.result)
+  })
+
+  it('should call Hasher with correct value', async () => {
+    const { sut, hasherSpy } = makeSut()
+    const params = mockAddUserParams()
+    await sut.add(params)
+    expect(hasherSpy.params.plaintext).toBe(params.password)
   })
 })
