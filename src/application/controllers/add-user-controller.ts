@@ -21,7 +21,6 @@ export class AddUserController {
         return badRequest(error)
       }
       const result = await this.addUser.add(httpRequest)
-      console.log(result)
       if (result instanceof UsernameInUseError) {
         return badRequest(new UsernameInUseError())
       }
