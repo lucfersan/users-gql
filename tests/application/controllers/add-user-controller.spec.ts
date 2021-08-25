@@ -1,15 +1,18 @@
 import { AddUserController } from '@/application/controllers'
 import { badRequest } from '@/application/helpers'
-import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
+import { AddUserSpy, mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 type SutTypes = {
   sut: AddUserController
+  addUserSpy: AddUserSpy
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new AddUserController()
+  const addUserSpy = new AddUserSpy()
+  const sut = new AddUserController(addUserSpy)
   return {
-    sut
+    sut,
+    addUserSpy
   }
 }
 
@@ -21,5 +24,12 @@ describe('AddUserController', () => {
       firstName: ''
     })
     expect(httpResponse).toEqual(badRequest(new Error('Required field: firstName')))
+  })
+
+  it('should return call AddUser with correct values', async () => {
+    const { sut, addUserSpy } = makeSut()
+    const params = mockAddUserParams()
+    await sut.handle(params)
+    expect(addUserSpy.params).toEqual(params)
   })
 })
