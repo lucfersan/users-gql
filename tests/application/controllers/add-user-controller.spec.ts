@@ -7,18 +7,16 @@ type HttpRequest = {
   age: number
   password: string
 }
-
 class AddUserController {
   async handle (httpRequest: HttpRequest): Promise<any> {
-    if (!httpRequest.firstName) {
-      return {
-        statusCode: 400,
-        data: new Error('Missing param: firstName')
-      }
-    } else if (!httpRequest.lastName) {
-      return {
-        statusCode: 400,
-        data: new Error('Missing param: lastName')
+    const requiredFields = Object.entries(httpRequest)
+    for (const field of requiredFields) {
+      const [key, value] = field
+      if (!value) {
+        return {
+          statusCode: 400,
+          data: new Error(`Required field: ${key}`)
+        }
       }
     }
   }
@@ -33,7 +31,7 @@ describe('AddUserController', () => {
     })
     expect(httpResponse).toEqual({
       statusCode: 400,
-      data: new Error('Missing param: firstName')
+      data: new Error('Required field: firstName')
     })
   })
 
@@ -45,7 +43,7 @@ describe('AddUserController', () => {
     })
     expect(httpResponse).toEqual({
       statusCode: 400,
-      data: new Error('Missing param: lastName')
+      data: new Error('Required field: lastName')
     })
   })
 })
