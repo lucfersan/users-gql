@@ -52,4 +52,18 @@ describe('ExpressRouterAdapter', () => {
     expect(res.json).toHaveBeenCalledWith({ ok: true })
     expect(res.json).toHaveBeenCalledTimes(1)
   })
+
+  it('should respond with 201 and valid data', async () => {
+    controller.handle.mockResolvedValue({
+      statusCode: 201,
+      data: {
+        ok: 'created'
+      }
+    })
+    await sut(req, res, next)
+    expect(res.status).toHaveBeenCalledWith(201)
+    expect(res.status).toHaveBeenCalledTimes(1)
+    expect(res.json).toHaveBeenCalledWith({ ok: 'created' })
+    expect(res.json).toHaveBeenCalledTimes(1)
+  })
 })
