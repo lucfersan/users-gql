@@ -4,7 +4,7 @@ export type HttpResponse = {
 }
 
 export const created = (data: object): HttpResponse => ({
-  statusCode: 400,
+  statusCode: 201,
   data
 })
 
