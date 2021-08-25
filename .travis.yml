@@ -3,6 +3,10 @@ node_js:
  - 16
 services:
   - docker
+before_install:
+  -  npm run up
 script:
   - npm run lint
   - npm run test:coveralls
+after_success:
+  - npm up down

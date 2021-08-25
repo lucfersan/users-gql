@@ -1,6 +1,6 @@
 {
   "name": "users-gql",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "engines": {
     "node": "16.x"
   },
@@ -16,8 +16,7 @@
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
-    "test:coveralls": "npm run test:dc && coveralls < coverage/lcov.info",
-    "test:dc": "npm run up && npm run test:ci && npm run down",
+    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info",
     "up": "docker-compose up -d",
     "down": "docker-compose down"
   },
