@@ -1,4 +1,5 @@
 import { AddUserController } from '@/application/controllers'
+import { badRequest } from '@/application/helpers'
 import { mockAddUserParams } from '@/tests/domain/mocks/use-cases'
 
 type SutTypes = {
@@ -19,9 +20,6 @@ describe('AddUserController', () => {
       ...mockAddUserParams(),
       firstName: ''
     })
-    expect(httpResponse).toEqual({
-      statusCode: 400,
-      data: new Error('Required field: firstName')
-    })
+    expect(httpResponse).toEqual(badRequest(new Error('Required field: firstName')))
   })
 })
