@@ -33,15 +33,23 @@ describe('ExpressRouterAdapter', () => {
   })
 
   it('should call handle with correct request', async () => {
-    sut(req, res, next)
+    await sut(req, res, next)
     expect(controller.handle).toHaveBeenCalledWith({ field })
     expect(controller.handle).toHaveBeenCalledTimes(1)
   })
 
   it('should call handle with empty request', async () => {
     const req = getMockReq()
-    sut(req, res, next)
+    await sut(req, res, next)
     expect(controller.handle).toHaveBeenCalledWith({})
     expect(controller.handle).toHaveBeenCalledTimes(1)
+  })
+
+  it('should respond with 200 and valid data', async () => {
+    await sut(req, res, next)
+    expect(res.status).toHaveBeenCalledWith(200)
+    expect(res.status).toHaveBeenCalledTimes(1)
+    expect(res.json).toHaveBeenCalledWith({ ok: true })
+    expect(res.json).toHaveBeenCalledTimes(1)
   })
 })
