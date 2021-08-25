@@ -30,4 +30,9 @@ describe('ApolloServerResolverAdapter', () => {
     expect(controller.handle).toHaveBeenCalledWith({})
     expect(controller.handle).toHaveBeenCalledTimes(1)
   })
+
+  it('should respond with valid data', async () => {
+    const data = await adaptApolloResolver(controller)
+    expect(data).toEqual({ ok: true })
+  })
 })
