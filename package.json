@@ -1,6 +1,6 @@
 {
   "name": "users-gql",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "engines": {
     "node": "16.x"
   },
@@ -16,9 +16,10 @@
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "test:coveralls": "npm run test:dc && coveralls < coverage/lcov.info",
+    "test:dc": "npm run up && npm run test:ci && npm run down",
     "up": "docker-compose up -d",
-    "down": "docker-compose down",
-    "test:coveralls": "npm run up && npm run test:ci && coveralls < coverage/lcov.info && npm run down"
+    "down": "docker-compose down"
   },
   "dependencies": {
     "@prisma/client": "^2.29.1",
