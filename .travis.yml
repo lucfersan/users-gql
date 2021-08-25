@@ -5,6 +5,8 @@ services:
   - docker
 before_install:
   -  npm run up
+install:
+ - npm install
 script:
   - npm run lint
   - npm run test:coveralls
