@@ -43,6 +43,9 @@ I'm practicing a lot of both unit and integration tests, as you can see in the c
    ```
 3. Create a database and a Postgres server using docker or your local machine.
 
+## 🧪 Testing
+You need to have  a Postgres database running to test the Prisma integration.
+
 ## 💻 Running the app
 
 ```bash
