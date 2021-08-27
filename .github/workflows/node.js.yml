@@ -12,15 +12,34 @@ jobs:
     runs-on: ubuntu-latest
     container: node
 
+    services:
+      database:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: docker
+          POSTGRES_DB: users_gql
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Setup docker container for tests
-        run: docker run --name postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
 
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
       - name: Run tests and coverage
         run: npm test:coveralls
+        env:
+          DATABASE_NAME: users_gql
+          DATABASE_USER: postgres
+          DATABASE_PASS: docker
+          DATABASE_PORT: 5432
+          DATABASE_HOST: database
+

@@ -13,7 +13,12 @@ class PrismaTestEnvironment extends NodeEnvironment {
   constructor (config) {
     super(config)
     this.schema = `test_${v4()}`
-    this.connectionString = `postgresql://postgres:docker@localhost:5432/users_gql?schema=${this.schema}`
+    const dbUser = process.env.DATABASE_USER
+    const dbPass = process.env.DATABASE_PASS
+    const dbHost = process.env.DATABASE_HOST
+    const dbPort = process.env.DATABASE_PORT
+    const dbName = process.env.DATABASE_NAME
+    this.connectionString = `postgresql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}?schema=${this.schema}`
   }
 
   async setup () {
