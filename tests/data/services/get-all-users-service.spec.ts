@@ -29,4 +29,10 @@ describe('GetAllUsersService', () => {
     const promise = sut.get()
     await expect(promise).rejects.toThrow()
   })
+
+  it('should return a list of Users on success', async () => {
+    const { sut, getAllUsersRepositorySpy } = makeSut()
+    const users = await sut.get()
+    expect(users).toEqual(getAllUsersRepositorySpy.result)
+  })
 })
