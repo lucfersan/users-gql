@@ -8,7 +8,7 @@ on:
 
 jobs:
   code:
-    name: Build and Test
+    name: Test and Coverage
     runs-on: ubuntu-latest
     container: node
 
@@ -34,12 +34,17 @@ jobs:
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Run tests and coverage
-        run: npm run test:coveralls
+      - name: Run coverage tests
+        run: make test-coverage
         env:
           DATABASE_NAME: users_gql
           DATABASE_USER: postgres
           DATABASE_PASS: docker
           DATABASE_PORT: 5432
           DATABASE_HOST: database
+
+      - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
 

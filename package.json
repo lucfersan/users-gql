@@ -16,8 +16,7 @@
     "test": "jest --passWithNoTests --noStackTrace --runInBand --no-cache",
     "test:watch": "npm test -- --watch",
     "test:staged": "npm test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage",
-    "test:coveralls": "npm run test:ci && coveralls < coverage/lcov.info"
+    "test:ci": "npm test -- --coverage"
   },
   "dependencies": {
     "@prisma/client": "^2.29.1",
