@@ -29,7 +29,7 @@ describe('AddUserController', () => {
     expect(httpResponse).toEqual(badRequest(new RequiredFieldError('firstName')))
   })
 
-  it('should return call AddUser with correct values', async () => {
+  it('should call AddUser with correct values', async () => {
     const { sut, addUserSpy } = makeSut()
     const params = mockAddUserParams()
     await sut.handle(params)
