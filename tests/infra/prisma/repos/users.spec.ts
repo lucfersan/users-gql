@@ -39,4 +39,24 @@ describe('PrismaUsersRepository', () => {
       expect(basicUser.username).toBe(params.username)
     })
   })
+
+  describe('getAll', () => {
+    it('should return a list of users on success', async () => {
+      const sut = makeSut()
+      await prisma.user.createMany({
+        data: [mockAddUserParams(), mockAddUserParams()]
+      })
+      const prismaUsers = await prisma.user.findMany({
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          age: true,
+          username: true
+        }
+      })
+      const users = await sut.getAll()
+      expect(users).toEqual(prismaUsers)
+    })
+  })
 })
