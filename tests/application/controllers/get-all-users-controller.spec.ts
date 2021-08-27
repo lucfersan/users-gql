@@ -1,5 +1,5 @@
 import { GetAllUsersController } from '@/application/controllers'
-import { serverError } from '@/application/helpers'
+import { ok, serverError } from '@/application/helpers'
 import { throwError } from '@/tests/domain/mocks'
 import { GetAllUsersSpy } from '@/tests/domain/mocks/use-cases'
 
@@ -29,5 +29,11 @@ describe('GetAllUsersController', () => {
     jest.spyOn(getAllUsersSpy, 'get').mockImplementationOnce(throwError)
     const httpResponse = await sut.handle({})
     expect(httpResponse).toEqual(serverError())
+  })
+
+  it('should return ok with users on success', async () => {
+    const { sut, getAllUsersSpy } = makeSut()
+    const httpResponse = await sut.handle({})
+    expect(httpResponse).toEqual(ok(getAllUsersSpy.result))
   })
 })
