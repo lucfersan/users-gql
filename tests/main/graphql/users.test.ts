@@ -17,20 +17,8 @@ describe('Users GraphQL', () => {
 
   describe('addUser Mutation', () => {
     const addUserMutation = gql`
-      mutation (
-        $firstName: String!
-        $lastName: String!
-        $username: String!
-        $age: Int!
-        $password: String!
-      ) {
-        addUser(
-          firstName: $firstName
-          lastName: $lastName
-          username: $username
-          age: $age
-          password: $password
-        ) {
+      mutation ($firstName: String!, $lastName: String!, $username: String!, $age: Int!, $password: String!) {
+        addUser(firstName: $firstName, lastName: $lastName, username: $username, age: $age, password: $password) {
           id
           firstName
           username
