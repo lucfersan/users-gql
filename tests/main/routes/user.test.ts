@@ -21,4 +21,25 @@ describe('User Routes', () => {
       expect(body.username).toBe(params.username)
     })
   })
+
+  describe('GET /users', () => {
+    it('should get all users', async () => {
+      await prisma.user.createMany({
+        data: [mockAddUserParams(), mockAddUserParams()]
+      })
+      const { statusCode, body } = await request(app)
+        .get('/api/users')
+      const users = await prisma.user.findMany({
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          age: true,
+          username: true
+        }
+      })
+      expect(statusCode).toBe(200)
+      expect(body).toEqual(users)
+    })
+  })
 })
