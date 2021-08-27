@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/github/lucfersan/users-gql/badge.svg?branch=main)](https://coveralls.io/github/lucfersan/users-gql?branch=main)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Open Source](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://opensource.org/)
