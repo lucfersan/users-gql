@@ -35,7 +35,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Run tests and coverage
-        run: npm test:coveralls
+        run: npm run test:coveralls
         env:
           DATABASE_NAME: users_gql
           DATABASE_USER: postgres
