@@ -2,17 +2,14 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
+  code:
     name: Build and Test
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
     container: node
 
     services:
@@ -29,14 +26,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
-      
-      - name: Run tests
+
+      - name: Run Tests
       - run: npm test
