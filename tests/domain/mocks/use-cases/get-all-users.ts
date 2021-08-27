@@ -18,3 +18,13 @@ export const mockGetAllUsersResult = (): GetAllUsers.Result => [
     age: faker.datatype.number({ min: 0, max: 130 })
   }
 ]
+
+export class GetAllUsersSpy implements GetAllUsers {
+  result: GetAllUsers.Result = mockGetAllUsersResult()
+  callsCount = 0
+
+  async get (): Promise<GetAllUsers.Result> {
+    this.callsCount++
+    return this.result
+  }
+}
