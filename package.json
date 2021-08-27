@@ -10,6 +10,7 @@
     "dev": "ts-node-dev --respawn --transpile-only --clear -r dotenv-flow/config --inspect=0.0.0.0:9229 src/main",
     "clean": "rimraf dist",
     "build": "npm run clean && npx tsc -p tsconfig-build.json",
+    "postbuild": "npx prisma migrate deploy --preview-feature",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "jest --passWithNoTests --noStackTrace --runInBand --no-cache",
