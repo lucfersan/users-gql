@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  code:
+  coverage:
     name: Test and Coverage
     runs-on: ubuntu-latest
     container: node
@@ -35,16 +35,14 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Run coverage tests
-        run: make test-coverage
+        uses: artiomtr/jest-coverage-report-action@v2.0-rc.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 90
         env:
           DATABASE_NAME: users_gql
           DATABASE_USER: postgres
           DATABASE_PASS: docker
           DATABASE_PORT: 5432
           DATABASE_HOST: database
-
-      - name: Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
