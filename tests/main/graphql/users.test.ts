@@ -18,7 +18,7 @@ describe('Users GraphQL', () => {
   describe('addUser Mutation', () => {
     const addUserMutation = gql`
       mutation ($firstName: String!, $lastName: String!, $username: String!, $age: Int!, $password: String!) {
-        addUser(firstName: $firstName, lastName: $lastName, username: $username, age: $age, password: $password) {
+        addUser (firstName: $firstName, lastName: $lastName, username: $username, age: $age, password: $password) {
           id
           firstName
           username
@@ -49,6 +49,41 @@ describe('Users GraphQL', () => {
       })
       expect(res.data).toBeFalsy()
       expect(res.errors?.[0].message).toBe('The username provided is already in use.')
+    })
+  })
+
+  describe('getAllUsers Query', () => {
+    const getAllUsersQuery = gql`
+      query {
+        getAllUsers {
+          id
+          firstName
+          lastName
+          username
+          age
+        }
+      }
+    `
+
+    it('should get all users', async () => {
+      await prisma.user.createMany({
+        data: [mockAddUserParams(), mockAddUserParams()]
+      })
+      const res = await apolloServer.executeOperation({
+        query: getAllUsersQuery
+      })
+      const [firstUser, secondUser] = await prisma.user.findMany({
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          age: true,
+          username: true
+        }
+      })
+      expect(res.errors).toBeUndefined()
+      expect(res.data?.getAllUsers[0]).toEqual(firstUser)
+      expect(res.data?.getAllUsers[1]).toEqual(secondUser)
     })
   })
 })
