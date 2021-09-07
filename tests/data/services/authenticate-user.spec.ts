@@ -1,4 +1,5 @@
 import { AuthenticateUserService } from '@/data/services'
+import { AuthenticationError } from '@/domain/entities/errors'
 import { HashComparerSpy } from '@/tests/data/mocks/contracts/crypto'
 import { LoadUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
 import { throwError } from '@/tests/domain/mocks'
@@ -36,12 +37,19 @@ describe('AuthenticateUserService', () => {
     await expect(promise).rejects.toThrow()
   })
 
+  it('should return an AuthenticationError if LoadUserByUsernameRepository returns undefined', async () => {
+    const { sut, loadUserByUsernameRepositorySpy } = makeSut()
+    loadUserByUsernameRepositorySpy.result = undefined
+    const result = await sut.auth(mockAuthParams())
+    expect(result).toBeInstanceOf(AuthenticationError)
+  })
+
   it('should call HashComparer with correct values', async () => {
     const { sut, hashComparerSpy, loadUserByUsernameRepositorySpy } = makeSut()
     const params = mockAuthParams()
     await sut.auth(params)
     expect(hashComparerSpy.params.plaintext).toBe(params.password)
-    expect(hashComparerSpy.params.digest).toBe(loadUserByUsernameRepositorySpy.result.password)
+    expect(hashComparerSpy.params.digest).toBe(loadUserByUsernameRepositorySpy.result?.password)
   })
 
   it('should throw if HashComparer throws', async () => {
