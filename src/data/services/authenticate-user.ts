@@ -14,7 +14,10 @@ export class AuthenticateUserService implements AuthenticateUser {
     if (!user) {
       return new AuthenticationError()
     }
-    await this.hashComparer.compare({ plaintext: password, digest: user.password })
+    const isValid = await this.hashComparer.compare({ plaintext: password, digest: user.password })
+    if (!isValid) {
+      return new AuthenticationError()
+    }
     return new Error()
   }
 }
