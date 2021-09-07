@@ -1,2 +1,2 @@
-export * from './add-user-service'
-export * from './get-all-users-service'
+export * from './add-user'
+export * from './get-all-users'
