@@ -58,4 +58,11 @@ describe('AuthenticateUserService', () => {
     const promise = sut.auth(mockAuthParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('should return an AuthenticationError if HashComparer returns false', async () => {
+    const { sut, hashComparerSpy } = makeSut()
+    hashComparerSpy.result = false
+    const result = await sut.auth(mockAuthParams())
+    expect(result).toBeInstanceOf(AuthenticationError)
+  })
 })
