@@ -37,11 +37,11 @@ describe('AuthenticateUserService', () => {
   })
 
   it('should call HashComparer with correct values', async () => {
-    const { sut, hashComparerSpy } = makeSut()
+    const { sut, hashComparerSpy, loadUserByUsernameRepositorySpy } = makeSut()
     const params = mockAuthParams()
     await sut.auth(params)
     expect(hashComparerSpy.params.plaintext).toBe(params.password)
-    expect(hashComparerSpy.params.digest).toBe('digest')
+    expect(hashComparerSpy.params.digest).toBe(loadUserByUsernameRepositorySpy.result.password)
   })
 
   it('should throw if HashComparer throws', async () => {
