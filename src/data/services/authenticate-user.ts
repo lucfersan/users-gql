@@ -9,8 +9,8 @@ export class AuthenticateUserService implements AuthenticateUser {
   ) {}
 
   async auth ({ username, password }: AuthenticateUser.Params): Promise<AuthenticateUser.Result> {
-    await this.loadUserByUsernameRepository.load({ username })
-    await this.hashComparer.compare({ plaintext: password, digest: 'digest' })
+    const result = await this.loadUserByUsernameRepository.load({ username })
+    await this.hashComparer.compare({ plaintext: password, digest: result.password })
     return new Error()
   }
 }
