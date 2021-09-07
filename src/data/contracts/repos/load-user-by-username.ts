@@ -11,5 +11,5 @@ export namespace LoadUserByUsernameRepository {
     id: string
     firstName: string
     password: string
-  }
+  } | undefined
 }
