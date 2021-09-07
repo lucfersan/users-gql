@@ -29,6 +29,13 @@ describe('AuthenticateUserService', () => {
     expect(loadUserByUsernameRepositorySpy.params.username).toBe(params.username)
   })
 
+  it('should throw if LoadUserByUsernameRepository throws', async () => {
+    const { sut, loadUserByUsernameRepositorySpy } = makeSut()
+    jest.spyOn(loadUserByUsernameRepositorySpy, 'load').mockImplementationOnce(throwError)
+    const promise = sut.auth(mockAuthParams())
+    await expect(promise).rejects.toThrow()
+  })
+
   it('should call HashComparer with correct values', async () => {
     const { sut, hashComparerSpy } = makeSut()
     const params = mockAuthParams()
