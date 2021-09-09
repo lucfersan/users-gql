@@ -91,6 +91,18 @@ describe('ExpressRouterAdapter', () => {
     expect(res.json).toHaveBeenCalledTimes(1)
   })
 
+  it('should respond with 401 and valid error', async () => {
+    controller.handle.mockResolvedValue({
+      statusCode: 401,
+      data: new Error('error_four_hundred')
+    })
+    await sut(req, res, next)
+    expect(res.status).toHaveBeenCalledWith(401)
+    expect(res.status).toHaveBeenCalledTimes(1)
+    expect(res.json).toHaveBeenCalledWith({ error: 'error_four_hundred' })
+    expect(res.json).toHaveBeenCalledTimes(1)
+  })
+
   it('should respond with 500 and valid error', async () => {
     controller.handle.mockResolvedValue({
       statusCode: 500,
