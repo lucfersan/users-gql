@@ -72,5 +72,11 @@ describe('PrismaUsersRepository', () => {
       expect(user?.firstName).toBe(firstName)
       expect(user?.password).toBe(password)
     })
+
+    it('should return undefined if a user is not found', async () => {
+      const sut = makeSut()
+      const user = await sut.load({ username: faker.internet.userName() })
+      expect(user).toBeUndefined()
+    })
   })
 })
