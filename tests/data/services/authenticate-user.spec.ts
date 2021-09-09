@@ -84,4 +84,14 @@ describe('AuthenticateUserService', () => {
     const promise = sut.auth(mockAuthParams())
     await expect(promise).rejects.toThrow()
   })
+
+  it('should return the User id, firstName and a token on success', async () => {
+    const { sut, encrypterSpy, loadUserByUsernameRepositorySpy } = makeSut()
+    const result = await sut.auth(mockAuthParams())
+    expect(result).toEqual({
+      id: loadUserByUsernameRepositorySpy.result?.id,
+      firstName: loadUserByUsernameRepositorySpy.result?.firstName,
+      token: encrypterSpy.result.token
+    })
+  })
 })
