@@ -47,4 +47,38 @@ describe('BcryptAdapter', () => {
       expect(digest).toBe(fakeDigest)
     })
   })
+
+  describe('compare', () => {
+    let plaintext: string
+    let digest: string
+
+    beforeAll(() => {
+      plaintext = faker.internet.password()
+      digest = faker.datatype.uuid()
+      fakeBcrypt.compare.mockImplementation(() => true)
+    })
+
+    it('should call compare with correct values', async () => {
+      await sut.compare({ plaintext, digest })
+      expect(fakeBcrypt.compare).toHaveBeenCalledWith(plaintext, digest)
+      expect(fakeBcrypt.compare).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw if compare throws', async () => {
+      jest.spyOn(fakeBcrypt, 'compare').mockImplementationOnce(throwError)
+      const promise = sut.compare({ plaintext, digest })
+      await expect(promise).rejects.toThrow()
+    })
+
+    it('should return a false on compare failure', async () => {
+      jest.spyOn(fakeBcrypt, 'compare').mockImplementationOnce(() => false)
+      const isValid = await sut.compare({ plaintext, digest })
+      expect(isValid).toBe(false)
+    })
+
+    it('should return a true on compare success', async () => {
+      const isValid = await sut.compare({ plaintext, digest })
+      expect(isValid).toBe(true)
+    })
+  })
 })
