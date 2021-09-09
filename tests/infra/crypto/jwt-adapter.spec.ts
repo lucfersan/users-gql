@@ -2,6 +2,7 @@ import faker from 'faker'
 import jwt from 'jsonwebtoken'
 
 import { JwtAdapter } from '@/infra/crypto'
+import { throwError } from '@/tests/domain/mocks'
 
 jest.mock('jsonwebtoken')
 
@@ -35,6 +36,12 @@ describe('JwtAdapter', () => {
       await sut.encrypt({ plaintext, expiresIn })
       expect(fakeJwt.sign).toHaveBeenCalledWith({ id: plaintext }, secret, { expiresIn })
       expect(fakeJwt.sign).toHaveBeenCalledTimes(1)
+    })
+
+    it('should throw if sign throws', async () => {
+      jest.spyOn(fakeJwt, 'sign').mockImplementationOnce(throwError)
+      const promise = sut.encrypt({ plaintext, expiresIn })
+      await expect(promise).rejects.toThrow()
     })
   })
 })
