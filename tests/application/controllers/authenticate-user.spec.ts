@@ -1,6 +1,6 @@
 import { AuthenticateUserController } from '@/application/controllers'
 import { RequiredFieldError } from '@/application/errors'
-import { badRequest, ok, serverError } from '@/application/helpers'
+import { badRequest, ok, serverError, unauthorized } from '@/application/helpers'
 import { AuthenticationError } from '@/domain/entities/errors'
 import { throwError } from '@/tests/domain/mocks'
 import { AuthenticateUserSpy, mockAuthParams } from '@/tests/domain/mocks/use-cases'
@@ -43,11 +43,11 @@ describe('AuthenticateUserController', () => {
     expect(httpResponse).toEqual(serverError())
   })
 
-  it('should return a badRequest with AuthenticationError if the username or password is incorrect', async () => {
+  it('should return unauthorized with AuthenticationError if the username or password is incorrect', async () => {
     const { sut, authenticateUserSpy } = makeSut()
     authenticateUserSpy.result = new AuthenticationError()
     const httpResponse = await sut.handle(mockAuthParams())
-    expect(httpResponse).toEqual(badRequest(new AuthenticationError()))
+    expect(httpResponse).toEqual(unauthorized(new AuthenticationError()))
   })
 
   it('should return ok on success', async () => {
