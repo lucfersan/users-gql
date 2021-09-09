@@ -77,4 +77,11 @@ describe('AuthenticateUserService', () => {
     expect(encrypterSpy.params.plaintext).toBe(loadUserByUsernameRepositorySpy.result?.id)
     expect(encrypterSpy.params.expiresIn).toBe(Token.expirationInSeconds)
   })
+
+  it('should throw if Encrypter throws', async () => {
+    const { sut, encrypterSpy } = makeSut()
+    jest.spyOn(encrypterSpy, 'encrypt').mockImplementationOnce(throwError)
+    const promise = sut.auth(mockAuthParams())
+    await expect(promise).rejects.toThrow()
+  })
 })
