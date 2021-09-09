@@ -20,7 +20,11 @@ export class AuthenticateUserService implements AuthenticateUser {
     if (!isValid) {
       return new AuthenticationError()
     }
-    await this.encrypter.encrypt({ plaintext: user.id, expiresIn: Token.expirationInSeconds })
-    return new Error()
+    const { token } = await this.encrypter.encrypt({ plaintext: user.id, expiresIn: Token.expirationInSeconds })
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      token
+    }
   }
 }
