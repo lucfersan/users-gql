@@ -1,6 +1,7 @@
 import { AuthenticateUserService } from '@/data/services'
+import { Token } from '@/domain/entities'
 import { AuthenticationError } from '@/domain/entities/errors'
-import { HashComparerSpy } from '@/tests/data/mocks/contracts/crypto'
+import { HashComparerSpy, EncrypterSpy } from '@/tests/data/mocks/contracts/crypto'
 import { LoadUserByUsernameRepositorySpy } from '@/tests/data/mocks/contracts/repos'
 import { throwError } from '@/tests/domain/mocks'
 import { mockAuthParams } from '@/tests/domain/mocks/use-cases'
@@ -9,16 +10,19 @@ type SutTypes = {
   sut: AuthenticateUserService
   loadUserByUsernameRepositorySpy: LoadUserByUsernameRepositorySpy
   hashComparerSpy: HashComparerSpy
+  encrypterSpy: EncrypterSpy
 }
 
 const makeSut = (): SutTypes => {
   const loadUserByUsernameRepositorySpy = new LoadUserByUsernameRepositorySpy()
   const hashComparerSpy = new HashComparerSpy()
-  const sut = new AuthenticateUserService(loadUserByUsernameRepositorySpy, hashComparerSpy)
+  const encrypterSpy = new EncrypterSpy()
+  const sut = new AuthenticateUserService(loadUserByUsernameRepositorySpy, hashComparerSpy, encrypterSpy)
   return {
     sut,
     loadUserByUsernameRepositorySpy,
-    hashComparerSpy
+    hashComparerSpy,
+    encrypterSpy
   }
 }
 
@@ -64,5 +68,13 @@ describe('AuthenticateUserService', () => {
     hashComparerSpy.result = false
     const result = await sut.auth(mockAuthParams())
     expect(result).toBeInstanceOf(AuthenticationError)
+  })
+
+  it('should call Encrypter with correct values', async () => {
+    const { sut, encrypterSpy, loadUserByUsernameRepositorySpy } = makeSut()
+    const params = mockAuthParams()
+    await sut.auth(params)
+    expect(encrypterSpy.params.plaintext).toBe(loadUserByUsernameRepositorySpy.result?.id)
+    expect(encrypterSpy.params.expiresIn).toBe(Token.expirationInSeconds)
   })
 })
