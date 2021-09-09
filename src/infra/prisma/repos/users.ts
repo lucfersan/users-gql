@@ -1,7 +1,7 @@
-import { AddUserRepository, CheckUserByUsernameRepository, GetAllUsersRepository } from '@/data/contracts/repos'
+import { AddUserRepository, CheckUserByUsernameRepository, GetAllUsersRepository, LoadUserByUsernameRepository } from '@/data/contracts/repos'
 import prisma from '@/infra/prisma/client'
 
-export class PrismaUsersRepository implements CheckUserByUsernameRepository, AddUserRepository, GetAllUsersRepository {
+export class PrismaUsersRepository implements CheckUserByUsernameRepository, AddUserRepository, GetAllUsersRepository, LoadUserByUsernameRepository {
   async check ({ username }: CheckUserByUsernameRepository.Params): Promise<CheckUserByUsernameRepository.Result> {
     const user = await prisma.user.findUnique({ where: { username } })
     return !!user
@@ -27,5 +27,10 @@ export class PrismaUsersRepository implements CheckUserByUsernameRepository, Add
       }
     })
     return users
+  }
+
+  async load ({ username }: LoadUserByUsernameRepository.Params): Promise<LoadUserByUsernameRepository.Result> {
+    const user = await prisma.user.findUnique({ where: { username } })
+    return user ?? undefined
   }
 }
