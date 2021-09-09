@@ -43,5 +43,10 @@ describe('JwtAdapter', () => {
       const promise = sut.encrypt({ plaintext, expiresIn })
       await expect(promise).rejects.toThrow()
     })
+
+    it('should return a token on sign success', async () => {
+      const { token } = await sut.encrypt({ plaintext, expiresIn })
+      expect(token).toBe(fakeToken)
+    })
   })
 })
