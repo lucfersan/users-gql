@@ -1,12 +1,14 @@
-import { HashComparer } from '@/data/contracts/crypto'
+import { Encrypter, HashComparer } from '@/data/contracts/crypto'
 import { LoadUserByUsernameRepository } from '@/data/contracts/repos'
+import { Token } from '@/domain/entities'
 import { AuthenticationError } from '@/domain/entities/errors'
 import { AuthenticateUser } from '@/domain/use-cases'
 
 export class AuthenticateUserService implements AuthenticateUser {
   constructor (
     private readonly loadUserByUsernameRepository: LoadUserByUsernameRepository,
-    private readonly hashComparer: HashComparer
+    private readonly hashComparer: HashComparer,
+    private readonly encrypter: Encrypter
   ) {}
 
   async auth ({ username, password }: AuthenticateUser.Params): Promise<AuthenticateUser.Result> {
@@ -18,6 +20,7 @@ export class AuthenticateUserService implements AuthenticateUser {
     if (!isValid) {
       return new AuthenticationError()
     }
+    await this.encrypter.encrypt({ plaintext: user.id, expiresIn: Token.expirationInSeconds })
     return new Error()
   }
 }
