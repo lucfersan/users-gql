@@ -59,4 +59,18 @@ describe('PrismaUsersRepository', () => {
       expect(users).toEqual(prismaUsers)
     })
   })
+
+  describe('load', () => {
+    it('should load a user by username', async () => {
+      const sut = makeSut()
+      const params = mockAddUserParams()
+      const { id, firstName, username, password } = await prisma.user.create({
+        data: params
+      })
+      const user = await sut.load({ username })
+      expect(user?.id).toBe(id)
+      expect(user?.firstName).toBe(firstName)
+      expect(user?.password).toBe(password)
+    })
+  })
 })
