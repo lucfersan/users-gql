@@ -1,8 +1,8 @@
 const { exec } = require('child_process')
+const { randomUUID } = require('crypto')
 const NodeEnvironment = require('jest-environment-node')
 const { Client } = require('pg')
 const util = require('util')
-const { v4 } = require('uuid')
 
 require('dotenv-flow').config({ node_env: 'test', silent: true })
 
@@ -12,7 +12,7 @@ const prismaBinary = './node_modules/.bin/prisma'
 class PrismaTestEnvironment extends NodeEnvironment {
   constructor (config) {
     super(config)
-    this.schema = `test_${v4()}`
+    this.schema = `test_${randomUUID()}`
     const dbUser = process.env.DATABASE_USER
     const dbPass = process.env.DATABASE_PASS
     const dbHost = process.env.DATABASE_HOST
