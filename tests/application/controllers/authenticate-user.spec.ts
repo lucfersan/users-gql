@@ -43,7 +43,7 @@ describe('AuthenticateUserController', () => {
     expect(httpResponse).toEqual(serverError())
   })
 
-  it('should return a badRequest with AuthenticationError if the username already exists', async () => {
+  it('should return a badRequest with AuthenticationError if the username or password is incorrect', async () => {
     const { sut, authenticateUserSpy } = makeSut()
     authenticateUserSpy.result = new AuthenticationError()
     const httpResponse = await sut.handle(mockAuthParams())
