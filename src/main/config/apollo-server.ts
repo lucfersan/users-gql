@@ -1,3 +1,4 @@
+import { GraphQLResponse } from 'apollo-server-core'
 import { ApolloServer } from 'apollo-server-express'
 import { Express } from 'express'
 import { GraphQLError } from 'graphql'
@@ -9,13 +10,15 @@ const checkError = (error: GraphQLError, errorName: string): boolean => {
   return [error.name, error.originalError?.name].some(name => name === errorName)
 }
 
-const handleErrors = (response: any, errors: readonly GraphQLError[] | undefined): void => {
+const handleErrors = (response: GraphQLResponse, errors: readonly GraphQLError[] | undefined): void => {
   errors?.forEach(error => {
     response.data = undefined
-    if (checkError(error, 'UserInputError')) {
-      response.http.status = 400
-    } else {
-      response.http.status = 500
+    if (response.http) {
+      if (checkError(error, 'UserInputError')) {
+        response.http.status = 400
+      } else {
+        response.http.status = 500
+      }
     }
   })
 }
