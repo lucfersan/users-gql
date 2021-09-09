@@ -19,7 +19,7 @@ export class AuthenticateUserController implements Controller {
       }
       const result = await this.authenticateUser.auth(httpRequest)
       if (result instanceof AuthenticationError) {
-        return badRequest(new AuthenticationError())
+        return badRequest(result)
       }
       return ok(result)
     } catch {

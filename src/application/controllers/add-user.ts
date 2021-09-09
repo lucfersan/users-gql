@@ -22,7 +22,7 @@ export class AddUserController implements Controller {
       }
       const result = await this.addUser.add(httpRequest)
       if (result instanceof UsernameInUseError) {
-        return badRequest(new UsernameInUseError())
+        return badRequest(result)
       }
       return created(result)
     } catch {
