@@ -1,4 +1,4 @@
-import { ApolloError, UserInputError } from 'apollo-server-express'
+import { ApolloError, UserInputError, AuthenticationError } from 'apollo-server-express'
 
 import { Controller } from '@/application/helpers'
 
@@ -9,6 +9,7 @@ export const adaptApolloResolver = async (controller: Controller, args?: any): P
     case 201:
     case 204: return data
     case 400: throw new UserInputError(data.message)
+    case 401: throw new AuthenticationError(data.message)
     default: throw new ApolloError(data.message)
   }
 }

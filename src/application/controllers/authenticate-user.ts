@@ -1,5 +1,5 @@
 import { RequiredFieldError } from '@/application/errors'
-import { badRequest, ok, HttpResponse, serverError, Controller } from '@/application/helpers'
+import { badRequest, ok, HttpResponse, serverError, unauthorized, Controller } from '@/application/helpers'
 import { AuthenticationError } from '@/domain/entities/errors'
 import { AuthenticateUser } from '@/domain/use-cases'
 
@@ -19,7 +19,7 @@ export class AuthenticateUserController implements Controller {
       }
       const result = await this.authenticateUser.auth(httpRequest)
       if (result instanceof AuthenticationError) {
-        return badRequest(result)
+        return unauthorized(result)
       }
       return ok(result)
     } catch {

@@ -16,6 +16,8 @@ const handleErrors = (response: GraphQLResponse, errors: readonly GraphQLError[]
     if (response.http) {
       if (checkError(error, 'UserInputError')) {
         response.http.status = 400
+      } else if (checkError(error, 'AuthenticationError')) {
+        response.http.status = 401
       } else {
         response.http.status = 500
       }
